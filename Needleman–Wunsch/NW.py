@@ -84,6 +84,80 @@ def nw_alligne(a, b, *args):
     return
 
 
+def local_nw_alligne(a, b, *args):
+
+    matrix = np.zeros((len(a)+1, len(b)+1), dtype=int)
+
+    match_score = args[0]
+    missmatch_score = args[1]
+    gap_score = args[2]
+
+    # print_matrix(matrix)
+
+    for i in range(len(a) + 1):
+        matrix[i][0] = -i
+    for j in range(len(b) + 1):
+        matrix[0][j] = -j
+
+    for i in range(1, len(a) + 1):
+        for j in range(1, len(b) + 1):
+            gap_a = matrix[i, j - 1] + gap_score
+            gap_b = matrix[i - 1, j] + gap_score
+            eq = matrix[i - 1, j - 1] + \
+                (match_score if a[i - 1] == b[j - 1] else missmatch_score)
+            max_score = max(gap_a, gap_b, eq)
+            if max_score < 0:
+                matrix[i, j] = 0
+            else:
+                matrix[i, j] = max_score
+
+    max_weight = 0
+    m_i, m_j = 0, 0
+    for i in range(1, len(a) + 1):
+        for j in range(1, len(b) + 1):
+            if matrix[i,j] > max_weight:
+                m_i = i
+                m_j = j
+    i = m_i
+    j = m_j
+    s_a, s_b = '', ''
+
+    while (i > 0) and (j > 0) and :
+        gap_a = matrix[i, j - 1] + gap_score
+        gap_b = matrix[i - 1, j] + gap_score
+        eq = matrix[i - 1, j - 1] + \
+            (match_score if a[i - 1] == b[j - 1] else missmatch_score)
+        max_score = max(gap_a, gap_b, eq)
+        if max_score == gap_a:
+            s_a = '-' + s_a
+            s_b = b[j - 1] + s_b
+            j -= 1
+        elif max_score == gap_b:
+            s_b = '-' + s_b
+            s_a = a[i - 1] + s_a
+            i -= 1
+        elif max_score == eq:
+            s_a = a[i - 1] + s_a
+            s_b = b[j - 1] + s_b
+            i -= 1
+            j -= 1
+
+    while i > 0:
+        s_a = a[i - 1] + s_a
+        s_b = '-' + s_b
+        i -= 1
+    while j > 0:
+        s_a = '-' + s_a
+        s_b = b[j - 1] + s_b
+        j -= 1
+
+    # print_matrix(matrix)
+
+    print("a: " + s_a)
+    print("b: " + s_b)
+    return
+
+
 if __name__ == "__main__":
     def test(n, a, b, m, mm, gp):
         print("test " + str(n) + ":")
