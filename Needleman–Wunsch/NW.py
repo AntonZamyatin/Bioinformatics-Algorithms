@@ -38,8 +38,8 @@ def nw_alligne(a, b):
 
     for i in range(1, len(a) + 1):
         for j in range(1, len(b) + 1):
-            gap_a = matrix[i - 1, j] + gap_score
-            gap_b = matrix[i, j - 1] + gap_score
+            gap_a = matrix[i, j - 1] + gap_score
+            gap_b = matrix[i - 1, j] + gap_score
             eq = matrix[i - 1, j - 1] + \
                 (match_score if a[i - 1] == b[j - 1] else missmatch_score)
             matrix[i, j] = max(gap_a, gap_b, eq)
@@ -48,8 +48,8 @@ def nw_alligne(a, b):
     j = len(b)
     s_a, s_b = '', ''
     while (i > 0) and (j > 0):
-        gap_a = matrix[i - 1, j] + gap_score
-        gap_b = matrix[i, j - 1] + gap_score
+        gap_a = matrix[i, j - 1] + gap_score
+        gap_b = matrix[i - 1, j] + gap_score
         eq = matrix[i - 1, j - 1] + \
             (match_score if a[i - 1] == b[j - 1] else missmatch_score)
         max_score = max(gap_a, gap_b, eq)
@@ -86,8 +86,8 @@ def nw_alligne(a, b):
 
 alph = ('A', 'C', 'G', 'T')
 
-a = 'ACGTCATCA'
-b = 'TAGTGTCA'
+a = 'институт_биоинформатики'
+b = 'институт_наноинфокотики'
 n_a, n_b = int(input()), int(input())
 '''
 for i in range(n_a):
