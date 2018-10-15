@@ -1,16 +1,18 @@
-"""Alining algorithms"""
+"""Alining algorithms."""
+
+import numpy as np
 
 
 def nw_aligne(a, b, *args, printing=0):
     """Needleman–Wunsch algorithm function.
+
     a,b - 1st and 2nd strings
     *args - list of scores for match, missmatch and gap
     print - matrix printing flag
-
     Function prints global alining for a and b
     """
     def print_matrix(matrix):
-        """weight matrix printing"""
+        """Weight matrix printing."""
         print(' ', '-', sep='\t', end='\t')
         for ch in b:
             print(ch, end='\t')
@@ -103,28 +105,30 @@ def nw_aligne(a, b, *args, printing=0):
         print("   " + s_c)
         print("b: " + s_b)
     else:
-        for n in range(len(a) // 50):
-            print("a [{}:{}]: ".format(50*n, 50*n+50 - 1) + s_a[n*50:n*50+50])
-            print("  " + " "*len("[{}:{}]: ".format(50*n, 50*n+50 - 1)) + s_c[n*50:n*50+50])
-            print("b [{}:{}]: ".format(50*n, 50*n+50 - 1) + s_b[n*50:n*50+50])
+        for n in range(len(s_a) // 50):
+            print("a [{}:{}]: ".format(50*n, 50*n+49) + s_a[n*50:n*50+50])
+            print("  " + " "*len("[{}:{}]: ".format(50*n, 50*n+49)) +
+                  s_c[n*50:n*50+50])
+            print("b [{}:{}]: ".format(50*n, 50*n+49) + s_b[n*50:n*50+50])
             print()
-        print("a [{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1) + s_a[(n+1)*50:])
-        print("  " + " "*len("[{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1)) + s_c[(n+1)*50:])
-        print("b [{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1) + s_b[(n+1)*50:])
-        print()
+        if len(s_a) % 50:
+            print("a [{}:{}]: ".format(50*(n+1), 50*(n+1)+49) + s_a[(n+1)*50:])
+            print("  " + " "*len("[{}:{}]: ".format(50*(n+1), 50*(n+1)+49)) +
+                  s_c[(n+1)*50:])
+            print("b [{}:{}]: ".format(50*(n+1), 50*(n+1)+49) + s_b[(n+1)*50:])
+            print()
 
     return
 
 
 def nw_aligne_with_matrix(a, b, w_matrix, gap_penalty):
     """Needleman–Wunsch algorithm function.
+
     a,b - 1st and 2nd strings
     w_matrix - dict of scores for match, missmatch and gap
     gap_penalty - score for gap
-
     Function prints global alining for a and b
     """
-
     # initialization
     matrix = np.zeros((len(a)+1, len(b)+1))
 
@@ -191,21 +195,25 @@ def nw_aligne_with_matrix(a, b, w_matrix, gap_penalty):
         print("   " + s_c)
         print("b: " + s_b)
     else:
-        for n in range(len(a) // 50):
-            print("a [{}:{}]: ".format(50*n, 50*n+50 - 1) + s_a[n*50:n*50+50])
-            print("  " + " "*len("[{}:{}]: ".format(50*n, 50*n+50 - 1)) + s_c[n*50:n*50+50])
-            print("b [{}:{}]: ".format(50*n, 50*n+50 - 1) + s_b[n*50:n*50+50])
+        for n in range(len(s_a) // 50):
+            print("a [{}:{}]: ".format(50*n, 50*n+49) + s_a[n*50:n*50+50])
+            print("  " + " "*len("[{}:{}]: ".format(50*n, 50*n+49)) +
+                  s_c[n*50:n*50+50])
+            print("b [{}:{}]: ".format(50*n, 50*n+49) + s_b[n*50:n*50+50])
             print()
-        print("a [{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1) + s_a[(n+1)*50:])
-        print("  " + " "*len("[{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1)) + s_c[(n+1)*50:])
-        print("b [{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1) + s_b[(n+1)*50:])
-        print()
+        if len(s_a) % 50:
+            print("a [{}:{}]: ".format(50*(n+1), 50*(n+1)+49) + s_a[(n+1)*50:])
+            print("  " + " "*len("[{}:{}]: ".format(50*(n+1), 50*(n+1)+49)) +
+                  s_c[(n+1)*50:])
+            print("b [{}:{}]: ".format(50*(n+1), 50*(n+1)+49) + s_b[(n+1)*50:])
+            print()
 
     return
 
 
 def sw_aligne(a, b, *args, printing=0):
     """Smith-Waterman algorithm function.
+
     a,b - 1st and 2nd strings
     *args - list of scores for match, missmatch and gap
     printing - matrix printing flag
@@ -213,7 +221,7 @@ def sw_aligne(a, b, *args, printing=0):
     Function prints global alining for a and b
     """
     def print_matrix(matrix):
-        """weight matrix printing"""
+        """Weight matrix printing."""
         print(' ', '-', sep='\t', end='\t')
         for ch in b:
             print(ch, end='\t')
@@ -341,14 +349,17 @@ def sw_aligne(a, b, *args, printing=0):
         print("   " + s_c)
         print("b: " + s_b)
     else:
-        for n in range(len(a) // 50):
-            print("a [{}:{}]: ".format(50*n, 50*n+50 - 1) + s_a[n*50:n*50+50])
-            print("  " + " "*len("[{}:{}]: ".format(50*n, 50*n+50 - 1)) + s_c[n*50:n*50+50])
-            print("b [{}:{}]: ".format(50*n, 50*n+50 - 1) + s_b[n*50:n*50+50])
+        for n in range(len(s_a) // 50):
+            print("a [{}:{}]: ".format(50*n, 50*n+49) + s_a[n*50:n*50+50])
+            print("  " + " "*len("[{}:{}]: ".format(50*n, 50*n+49)) +
+                  s_c[n*50:n*50+50])
+            print("b [{}:{}]: ".format(50*n, 50*n+49) + s_b[n*50:n*50+50])
             print()
-        print("a [{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1) + s_a[(n+1)*50:])
-        print("  " + " "*len("[{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1)) + s_c[(n+1)*50:])
-        print("b [{}:{}]: ".format(50*(n+1), 50*(n+1)+50 - 1) + s_b[(n+1)*50:])
-        print()
+        if len(s_a) % 50:
+            print("a [{}:{}]: ".format(50*(n+1), 50*(n+1)+49) + s_a[(n+1)*50:])
+            print("  " + " "*len("[{}:{}]: ".format(50*(n+1), 50*(n+1)+49)) +
+                  s_c[(n+1)*50:])
+            print("b [{}:{}]: ".format(50*(n+1), 50*(n+1)+49) + s_b[(n+1)*50:])
+            print()
 
     return
