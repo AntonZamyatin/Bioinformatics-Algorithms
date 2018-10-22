@@ -406,61 +406,44 @@ def affine_gap_alining(a, b, *args, printing=0):
     # initialization
     x = len(a) + 1
     y = len(b) + 1
-    U = np.zeros((x, y))
+    gap_A = np.zeros((x, y))
     M = np.zeros((x, y))
-    L = np.zeros((x, y))
+    gap_B = np.zeros((x, y))
 
     for i in range(x):
-        for j in range(y):
-            if i > 0 and j == 0:
-                U[i, j] = -float("inf")
-            else:
-                if j > 0:
-                    U[i, j] = gap_enter + gap_elong * j
-                else:
-                    U[i, j] = 0
+        if i == 1:
+            gap_A[i, 0], M[i, 0], gap_B[i, 0] = [gap_enter + gap_elong] * 3
+        elif i > 1:
+            gap_A[i, 0] = gap_A[i-1, 0] + gap_elong
+            gap_B[i, 0] = gap_B[i-1, 0] + gap_elong
+            M[i, 0] = M[i-1, 0] + gap_elong
 
-    for i in range(x):
-        for j in range(y):
-            if j > 0 and i == 0:
-                L[i, j] = -float("inf")
-            else:
-                if i > 0:
-                    L[i, j] = gap_enter + gap_elong * j
-                else:
-                    L[i, j] = 0
-
-    for i in range(x):
-        for j in range(y):
-            if i == 0 and j == 0:
-                M[i, j] = 0
-            else:
-                if i == 0 or j == 0:
-                    M[i, j] = -float("inf")
-                else:
-                    M[i, j] = 0
-
+    for j in range(y):
+        if j == 1:
+            gap_A[0, j], M[0, j], gap_B[0, j] = [gap_enter + gap_elong] * 3
+        elif j > 1:
+            gap_A[0, j] = gap_A[0, j-1] + gap_elong
+            gap_B[0, j] = gap_B[0, j-1] + gap_elong
+            M[0, j] = M[0, j-1] + gap_elong
 
     # weight matrises formation
 
     for i in range(1, len(a) + 1):
         for j in range(1, len(b) + 1):
-            U[i, j] = max((gap_enter + gap_elong + M[i, j-1]),
-                          (gap_elong + U[i, j-1]),
-                          (gap_enter + gap_elong + L[i, j-1]))
-            L[i, j] = max((gap_enter + gap_elong + M[i-1, j]),
-                          (gap_enter + gap_elong + U[i-1, j]),
-                          (gap_enter + gap_elong + L[i-1, j]))
+            gap_A[i, j] = max((gap_enter + gap_elong + M[i, j-1]),
+                              (gap_elong + gap_A[i, j-1]))
+            gap_B[i, j] = max((gap_enter + gap_elong + M[i-1, j]),
+                              (gap_elong + gap_B[i-1, j]))
             M[i, j] = max(match(a, b, i, j) + M[i-1, j-1],
-                          U[i, j], L[i, j])
+                          gap_A[i, j], gap_B[i, j])
 
     # matrix printing
     if printing:
-        print_matrix(U)
+        print_matrix(gap_A)
         print()
         print_matrix(M)
         print()
-        print_matrix(L)
+        print_matrix(gap_B)
         print()
 
     # reverse matrix traversal and alignment making
@@ -476,32 +459,19 @@ def affine_gap_alining(a, b, *args, printing=0):
             s_c = ("|" if a[i - 1] == b[j - 1] else " ") + s_c
             i -= 1
             j -= 1
-        elif i > 0 and M[i, j] == U[i, j]:
+        elif i > 0 and M[i, j] == gap_B[i, j]:
             s_b = '-' + s_b
             s_a = a[i - 1] + s_a
             s_c = " " + s_c
             i -= 1
-        elif j > 0 and M[i, j] == L[i, j]:
+        elif j > 0 and M[i, j] == gap_A[i, j]:
             s_a = '-' + s_a
-            s_b = a[j - 1] + s_b
+            s_b = b[j - 1] + s_b
             s_c = " " + s_c
             j -= 1
         else:
-            print("pizdets")
+            print("problem")
             break
-
-    # adding remaining symbols
-
-    while i > 0:
-        s_a = a[i - 1] + s_a
-        s_b = '-' + s_b
-        s_c = " " + s_c
-        i -= 1
-    while j > 0:
-        s_a = '-' + s_a
-        s_b = b[j - 1] + s_b
-        s_c = " " + s_c
-        j -= 1
 
     # print alignment
 
@@ -524,6 +494,3 @@ def affine_gap_alining(a, b, *args, printing=0):
             print()
 
     return
-
-print("yo")
-affine_gap_alining("acccgtgctcga", "acagcgctgc", 1, -1, 0, -1)
