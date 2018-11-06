@@ -1,4 +1,4 @@
-""" Nussinov algorithm implementation"""
+"""Nussinov algorithm implementation."""
 
 import numpy as np
 
@@ -7,8 +7,8 @@ def nussinov(seq, printing=0):
     """Nussinov algorithm function.
 
     RNA secondary structure prediction
-    using complementary pairing maximisation."""
-
+    using complementary pairing maximisation.
+    """
     def mprint(seq, m):
         n = len(m)
         for i in range(n + 1):
